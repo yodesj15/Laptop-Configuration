@@ -1,12 +1,16 @@
+# YOAN DESJARDINS
+
 # TO DO: BEFORE LAUNCHING SCRIPT
 # 1- Launch Powershell admin
 # 2- Set-ExecutionPolicy Unrestricted 
 # 3- cd D: 
 # 4- cd '.\SCRIPTS\'
+
+# All softwares are located in SOFTWARES folder
 Set-Location "$pwd\SOFTWARES"
 $directoryPath = pwd
 
-
+# All software installer file path should be here
 $inAgentInstaller = "432WindowsAgentSetup_VALID_UNTIL_2025_02_25.exe"
 $fortiVPN = "FortiClientVPNSetup.exe"
 $teams = "TeamsSetup_c_w_.exe"
@@ -15,11 +19,15 @@ $adobeReader = "AdobeReaderInstaller.exe"
 $office = "OFFICE365\OfficeSetup.exe"
 $project = "OFFICE365\Project.exe"
 $nitro = "NITRO PRO\NITRO PRO 14\nitro_pro14_x64.msi"
-$planSwift = "PLAN SWIFT\ps11.0.0.129pro.exe"
-$maestro1 = "MAESTRO\MaCliSQLInstall.exe"
 $chrome = ".\chrome_install.ps1"
+
+# List of all software installer that will make a copu of the installer on the Desktop
+# This can resolve some issues with the installer
 $global:copyToDeskExeList = @($adobeReader, $office, $antiVirus, $fortiVPN)
 
+
+# Function used to install executable. 3 options are available : silent installation,
+# wait the installer to be done and an option to copy the installer on the desktop (Can resolve some issues).  
 function Install-exe {
     param (
         [string]$exePath,
@@ -53,23 +61,25 @@ function Install-exe {
             Write-Host "Launching $exe from Desktop ..."
             Start-Process -FilePath $desktopCopyPath -Wait
 
-           	if (Test-Path -Path $desktopCopyPath) {
+           	# Check if the exe is not already deleted
+            if (Test-Path -Path $desktopCopyPath) {
                 Write-Host "Removing $exe from Desktop ..."
                 Remove-Item -Path $desktopCopyPath -Force		
             }
         }
         else {
+            # Normal installation with option wait
             Start-Process -FilePath $executablePath -Wait
-
         }
         Write-Host "$exeName is done" -ForegroundColor Green -BackgroundColor Black
 
     }
     else {
         Write-Host "-- Failed to install. The folder $exe does not exist --" -ForegroundColor White -BackgroundColor Red
-
     }
 }
+
+# Function used to install multiple exe 3 at a time. Only a list of all the exe are needed. 
 function Multi-Exe-Install {
     param (
         [string[]]$exeList
@@ -100,8 +110,9 @@ function Multi-Exe-Install {
 
 }
 
+# Main program
 do {
-    # Display the menu
+    # Display the main Menu
     Write-Host ""
     Write-Host "-----------------------------------------------------------"
     Write-Host "Press the following numbers to choose an option:" -ForegroundColor Black -BackgroundColor White
@@ -114,9 +125,7 @@ do {
     Write-Host "6-   Install Office"
     Write-Host "7-   Install Nitro"
     Write-Host "8-   Install Chrome"
-    Write-Host "9-   Install Plan Swift"
-    Write-Host "10-  Install Maestro"
-    Write-Host "11-  Install Microsoft Project"
+    Write-Host "9-  Install Microsoft Project"
     Write-Host "A-   Install only necessary softwares"
     Write-Host ""
     Write-Host "C-   Enter Custom Installation Mode" -ForegroundColor Black -BackgroundColor Green
@@ -157,23 +166,13 @@ do {
             Invoke-Expression -Command $chrome
         }
         9 {
-            Install-exe -exePath $planSwift -exeName "Plan Swift" -silentInstall $false
-        }
-        10 {
-            Install-exe -exePath $maestro1 -exeName "Maestro Installer" -silentInstall $false 
-            Write-Host "Waiting ..."
-            Start-Sleep -Seconds 5
-            # Second install
-            Install-exe -exePath $maestro1 -exeName "Maestro Installer" -silentInstall $false
-
-        }
-        11 {
             Install-exe -exePath $project -exeName "Microsoft Project" -silentInstall $false
         }
         "A" {
             Multi-Exe-Install -exeList @($adobeReader, $chrome, $inAgentInstaller, $antiVirus, $office, $teams)
         }
         "C" {
+            # This option can be edited to automate software installation depending of the person title 
             Clear-Host
             Write-Host "Custom mode selected"
             # Display the custom mode menu
@@ -187,7 +186,7 @@ do {
             Write-Host "4-   Configuration for : Employe avec installation de base (Avec VPN & Nitro PDF)"
             Write-Host "5-   Configuration for : Employe avec installation de base (Sans VPN & Avec Nitro PDF)"
 
-            Write-Host "X-   Quit" -ForegroundColor White -BackgroundColor Red
+            Write-Host "X-   Exit Custom Menu" -ForegroundColor White -BackgroundColor Red
             Write-Host "-----------------------------------------------------------"
             Write-Host ""
             $typeInstallation = Read-Host "Choose which type of configuration you would like "
@@ -208,6 +207,7 @@ do {
                     Multi-Exe-Install -exeList @($adobeReader, $chrome, $inAgentInstaller, $antiVirus, $office, $teams, $nitro)
                 }
                 "X" {
+                    # Exit the custom menu
                     Clear-Host
                     Write-Host "Exiting Custom Mode..."
                     break 
@@ -220,6 +220,9 @@ do {
             
         }
         "U" {
+            # Install all Windows update
+
+            Write-Host "Getting Windows Updates Module" 
             Install-Module -Name PSWindowsUpdate -Force -SkipPublisherCheck
             Import-Module PSWindowsUpdate
 
@@ -248,6 +251,7 @@ do {
         "X" {
             Clear-Host
             Write-Host "Exit..."
+            # Returning to the main branch file
             cd ..
             break 
         }
