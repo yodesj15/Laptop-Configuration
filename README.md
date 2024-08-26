@@ -13,7 +13,8 @@ Ce script PowerShell permet d'automatiser l'installation de plusieurs logiciels 
 
 ## Fichiers d'installation nécessaires
 
-Le script s'appuie sur les fichiers d'installation suivants, qui doivent être présents dans le répertoire
+Le script s'appuie sur les fichiers d'installation suivants, qui doivent être présents dans le répertoire. Ils doivent être téléchargé
+et ajouté dans le dossier SOFTWARES.
 
 **SOFTWARES :**
   - 432WindowsAgentSetup_VALID_UNTIL_2025_02_25.exe
@@ -48,3 +49,4 @@ Le mode d'installation personnalisée permet de choisir parmi différents profil
 # Avertissements
 
   - Ce script doit être exécuté avec les privilèges administratifs pour installer les logiciels et appliquer les mises à jour.
+  - Les fichiers d'installation des différents logiciel doivent être mis dans le dossier SOFTWARES.
