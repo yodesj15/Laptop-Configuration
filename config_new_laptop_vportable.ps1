@@ -104,7 +104,7 @@ function Multi-Exe-Install {
         if (($processRunning % $maxProcessRunning -eq 0) -and ($processRunning -lt $exeCount) ) {
             Write-Host "Waiting ..."
             Start-Sleep -Seconds 10
-            Read-host "Press ENTER to continue..."
+            Read-host "Press ENTER when all installations are complete..."
         }
     }
 
