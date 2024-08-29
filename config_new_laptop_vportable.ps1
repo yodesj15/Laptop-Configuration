@@ -8,7 +8,7 @@
 
 # All softwares are located in SOFTWARES folder
 Set-Location "$pwd\SOFTWARES"
-$directoryPath = pwd
+$directoryPath = Get-Location
 
 # All software installer file path should be here
 $inAgentInstaller = "432WindowsAgentSetup_VALID_UNTIL_2025_02_25.exe"
@@ -239,7 +239,7 @@ do {
             $userChoice = Read-host "Confirm Restart Y/N"
             if ($userChoice.ToLower() -eq "y" ) {
                 Write-Host "Restarting computer " 
-                cd ..
+                Set-Location ..
                 Restart-Computer
                 break 
             }
@@ -252,7 +252,7 @@ do {
             Clear-Host
             Write-Host "Exit..."
             # Returning to the main branch file
-            cd ..
+            Set-Location ..
             break 
         }
         default {
