@@ -28,7 +28,7 @@ $global:copyToDeskExeList = @($adobeReader, $office, $antiVirus, $fortiVPN)
 
 # Function used to install executable. 3 options are available : silent installation,
 # wait the installer to be done and an option to copy the installer on the desktop (Can resolve some issues).  
-function Install-exe {
+function Install-Exe {
     param (
         [string]$exePath,
         [string]$exeName,
@@ -80,7 +80,7 @@ function Install-exe {
 }
 
 # Function used to install multiple exe 3 at a time. Only a list of all the exe are needed. 
-function Multi-Exe-Install {
+function Install-MultiExe {
     param (
         [string[]]$exeList
     )
@@ -95,10 +95,10 @@ function Multi-Exe-Install {
             Invoke-Expression -Command $chrome
         }
         elseif ($global:copyToDeskExeList -contains $exe) {
-            Install-exe -exePath $exe -exeName $exe -silentInstall $false -copyToDesk $true -wait $false
+            Install-Exe -exePath $exe -exeName $exe -silentInstall $false -copyToDesk $true -wait $false
         }
         else {
-            Install-exe -exePath $exe -exeName $exe -silentInstall $false -wait $false
+            Install-Exe -exePath $exe -exeName $exe -silentInstall $false -wait $false
         }
         $processRunning++
         if (($processRunning % $maxProcessRunning -eq 0) -and ($processRunning -lt $exeCount) ) {
@@ -142,34 +142,34 @@ do {
     # Process the user's choice
     switch ($choice) {
         1 {
-            Install-exe -exePath $teams -exeName "Teams" -silentInstall $true
+            Install-Exe -exePath $teams -exeName "Teams" -silentInstall $true
         }
         2 {
-            Install-exe -exePath $fortiVPN -exeName "FortiClient" -silentInstall $false -copyToDesk $true
+            Install-Exe -exePath $fortiVPN -exeName "FortiClient" -silentInstall $false -copyToDesk $true
         }
         3 {
-            Install-exe -exePath $antiVirus -exeName "EDR" -silentInstall $false -copyToDesk $true
+            Install-Exe -exePath $antiVirus -exeName "EDR" -silentInstall $false -copyToDesk $true
         }
         4 {
-            Install-exe -exePath $inAgentInstaller -exeName "N-Agent" -silentInstall $false
+            Install-Exe -exePath $inAgentInstaller -exeName "N-Agent" -silentInstall $false
         }
         5 {
-            Install-exe -exePath $adobeReader -exeName "Adobe Reader" -silentInstall $true -copyToDesk $true
+            Install-Exe -exePath $adobeReader -exeName "Adobe Reader" -silentInstall $true -copyToDesk $true
         }
         6 {
-            Install-exe -exePath $office -exeName "Office365" -silentInstall $false
+            Install-Exe -exePath $office -exeName "Office365" -silentInstall $false
         }
         7 {
-            Install-exe -exePath $nitro -exeName "Nitro" -silentInstall $false
+            Install-Exe -exePath $nitro -exeName "Nitro" -silentInstall $false
         }
         8 {
             Invoke-Expression -Command $chrome
         }
         9 {
-            Install-exe -exePath $project -exeName "Microsoft Project" -silentInstall $false
+            Install-Exe -exePath $project -exeName "Microsoft Project" -silentInstall $false
         }
         "A" {
-            Multi-Exe-Install -exeList @($adobeReader, $chrome, $inAgentInstaller, $antiVirus, $office, $teams)
+            Install-MultiExe -exeList @($adobeReader, $chrome, $inAgentInstaller, $antiVirus, $office, $teams)
         }
         "C" {
             # This option can be edited to automate software installation depending of the person title 
@@ -192,19 +192,19 @@ do {
             $typeInstallation = Read-Host "Choose which type of configuration you would like "
             switch ($typeInstallation) {
                 1 {
-                    Multi-Exe-Install -exeList @($adobeReader, $chrome, $inAgentInstaller, $antiVirus, $office, $teams, $project, $nitro, $fortiVPN, $maestro1)
+                    Install-MultiExe -exeList @($adobeReader, $chrome, $inAgentInstaller, $antiVirus, $office, $teams, $project, $nitro, $fortiVPN, $maestro1)
                 }
                 2 {
-                    Multi-Exe-Install -exeList @($adobeReader, $chrome, $inAgentInstaller, $antiVirus, $office, $teams, $fortiVPN)
+                    Install-MultiExe -exeList @($adobeReader, $chrome, $inAgentInstaller, $antiVirus, $office, $teams, $fortiVPN)
                 }
                 3 {
-                    Multi-Exe-Install -exeList @($adobeReader, $chrome, $inAgentInstaller, $antiVirus, $office, $teams)
+                    Install-MultiExe -exeList @($adobeReader, $chrome, $inAgentInstaller, $antiVirus, $office, $teams)
                 }
                 4 {
-                    Multi-Exe-Install -exeList @($adobeReader, $chrome, $inAgentInstaller, $antiVirus, $office, $teams, $nitro, $fortiVPN)
+                    Install-MultiExe -exeList @($adobeReader, $chrome, $inAgentInstaller, $antiVirus, $office, $teams, $nitro, $fortiVPN)
                 }
                 5 {
-                    Multi-Exe-Install -exeList @($adobeReader, $chrome, $inAgentInstaller, $antiVirus, $office, $teams, $nitro)
+                    Install-MultiExe -exeList @($adobeReader, $chrome, $inAgentInstaller, $antiVirus, $office, $teams, $nitro)
                 }
                 "X" {
                     # Exit the custom menu
